@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "scores_function.h"
 
 struct _Student {
   int id;
@@ -11,7 +10,7 @@ struct _Student {
 typedef struct _Student Student;
 
 int getTotal();
-void create();
+void create(); //離開程序後會多差一個奇怪的東西
 void pre_create();
 void read();
 void list();  // TODO sort
@@ -27,6 +26,7 @@ int main(int argc, char const *argv[]) {
   char answer;
 
   total = getTotal("scores.bin");
+  printf("total is %d\n", total);
 
   printf("Welcome! Please choose an action.\n");
   is_continued = 1;
@@ -166,7 +166,7 @@ void read(Student *students, char file[], int total) {
   students = (Student *)malloc(sizeof(Student) * total);
   fread(students, sizeof(Student), total, f);
 
-  printf("id\tname\tmath\tenglish\taverage\n");
+  printf("id\tname\tmath\tenglish\taverage\t\n");
   for (int i = 0; i < s_number; i++) {
     for (int j = 0; j < total; j++) {
       if (ids[i] == students[j].id) {
@@ -193,7 +193,7 @@ void list(Student *students, int total, char file[]) {
 
   fread(students, sizeof(Student), total, f);
 
-  printf("id\tname\tmath\tenglish\taverage\n");
+  printf("id\tname\tmath\tenglish\taverage\t\n");
   for (int i = 0; i < total; i++) {
     printf("%d\t%s\t%d\t%d\t%f\n", students[i].id, students[i].name,
            students[i].score_math, students[i].score_english,
