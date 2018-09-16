@@ -24,7 +24,7 @@ void readFile();
 void saveFile();
 CheckResult checkId();
 void create();
-void list();
+void list(); // TODO sort
 CheckResult idSearch();
 void update();
 void delete();
@@ -99,6 +99,7 @@ void saveFile(const char fname[], Student **pStudents, int studentsCount) {
     printf("\nFile open error.\n\n");
   } else {
     fwrite(*pStudents, sizeof(Student), studentsCount, f);
+    printf("\nSaved!\n\n");
   }
   fclose(f);
 
