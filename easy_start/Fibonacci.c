@@ -2,6 +2,7 @@
 
 int F(int);
 void F_print(int, int *, int *, int *);
+int F_failed(int);
 
 int main(int argc, char const *argv[]) {
   int previousTwo = 0;
@@ -27,6 +28,10 @@ int main(int argc, char const *argv[]) {
   printf("\nRecursion with print is:\n");
   F_print(19, &previousOne, &previousTwo, &y);
 
+  // without pointer
+  printf("\nBetter one is:\n");
+  F_failed(19);
+
   return 0;
 }
 
@@ -50,5 +55,18 @@ void F_print(int n, int *previousOneP, int *previousTwoP, int *yP) {
   } else if (n == 1) {
     *previousTwoP = 0;
     *previousOneP = 1;
+  }
+}
+
+int F_failed(int n) {
+  int result;
+  if (n >= 2) {
+    result = F_failed(n - 1) + F_failed(n - 2);
+    printf("%d, ", result);
+    return result;
+  } else if (n == 0) {
+    return 0;
+  } else if (n == 1) {
+    return 1;
   }
 }
