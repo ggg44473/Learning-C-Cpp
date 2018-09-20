@@ -1,4 +1,5 @@
 #include "class.h"
+#include <Windows.h>
 
 int main() {
   int objectCount = 0;
@@ -20,13 +21,18 @@ int main() {
   right.x = MAXX - 1;
 
   // TODO need to make a function
-  stage.objectsP[0] = &top;
-  stage.objectsP[1] = &bottom;
-  stage.objectsP[2] = &left;
-  stage.objectsP[3] = &right;
-  stage.objectsP[4] = &ball;
+  stage.objectsPP[0][0] = &top;
+  stage.objectsPP[0][1] = &bottom;
+  stage.objectsPP[0][2] = &left;
+  stage.objectsPP[0][3] = &right;
+  stage.objectsPP[0][4] = &ball;
 
-
+  int stepCount = MAXSTEP;
+  do {
+  stage.clear();
+  stage.stepNext(objectCount);
   stage.show();
+  Sleep(200);
+  } while (stepCount--);
   return 0;
 }

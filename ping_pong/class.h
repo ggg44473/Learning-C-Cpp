@@ -4,6 +4,7 @@ using namespace std;
 
 #define MAXX 25
 #define MAXY 80
+#define MAXSTEP 100
 
 class Vector {
  public:
@@ -19,7 +20,7 @@ class Object;
 class Stage {
  public:
   char canvas[MAXX][MAXY];
-  Object **objectsP;
+  Object ***objectsPP;
 
   Stage(int);
   ~Stage();
@@ -38,13 +39,14 @@ class Stage {
       }
     }
   };
+  void stepNext(int);
 };
 
 class Object {
  public:
   virtual void draw(Stage &stage){};
   virtual void stepNext(){};
-  virtual void collide(Object *op){};
+  virtual void collide(Object *objects){};
 };
 
 class VWall : public Object {
@@ -81,9 +83,41 @@ class Ball : public Object {
     symbol = '$';
   };
   void draw(Stage &stage) { stage.canvas[position.x][position.y] = symbol; };
+  void stepNext() {
+    position.x += movement.x;
+    position.y += movement.y;
+  };
+  void collide(Object *objects) {
+    VWall *wx = dynamic_cast<VWall *>(objects);
+    if (wx != NULL) {
+      if ((position.x + movement.x) == wx->x) {
+        movement.x = -movement.x;
+      }
+    }
+    HWall *wy = dynamic_cast<HWall *>(objects);
+    if (wy != NULL) {
+      if ((position.y + movement.y) == wy->y) {
+        movement.y = -movement.y;
+      }
+    }
+  };
 };
 
 class Corner : public Object {};
 
-Stage::Stage(int objectCount) { *objectsP = new Object[objectCount]; };
-Stage::~Stage() { delete [] (*objectsP) };
+Stage::Stage(int objectCount) { **objectsPP = new Object[objectCount]; }
+Stage::~Stage() { delete[](*objectsPP); }
+void Stage::stepNext(int objectCount) {
+  for (int i = 0; i < objectCount; i++) {
+    for (int j = 0; j < objectCount; j++) {
+      if ( i != j) {
+        (*objectsPP)[i]->collide((*objectsPP)[j]);
+      }
+    }
+  }
+
+  for (int n = 0; n < objectCount; n++) {
+    (*objectsPP)[n]->stepNext();
+    (*objectsPP)[n]->draw(*this);
+  }
+};
